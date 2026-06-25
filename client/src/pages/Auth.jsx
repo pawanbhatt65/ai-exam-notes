@@ -4,20 +4,25 @@ import { FcGoogle } from "react-icons/fc";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../utils/firebase";
 import { BaseUrl } from "../BaseUrl";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 const Auth = () => {
+  const dispatch = useDispatch()
+
   const handleGoogleAuth = async () => {
     try {
       const response = await signInWithPopup(auth, provider);
       // console.log("response: ", response);
       const user = await response.user;
       if (user) {
-        console.log("user is: ", user);
+        // console.log("user is: ", user);
         const name = user.displayName;
         const email = user.email;
 
         const result = await BaseUrl.post(`/api/auth/google`, { name, email });
-        // console.log("result is: ", result.data);
+        console.log("result is: ", result.data);
+        dispatch(setUserData(result.data))
       }
     } catch (error) {
       console.log("try error: ", error);

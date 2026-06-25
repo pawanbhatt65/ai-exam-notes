@@ -1,14 +1,33 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import Logo from "../assets/logo.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { BaseUrl } from "../BaseUrl";
+import { setUserData } from "../redux/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const { userData } = useSelector((state) => state.user);
-  const credits = userData.user.credits;
+  const credits = userData?.credits;
   // console.log(credits);
   const [showCredits, setShowCredits] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+
+  // get dispatch
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // signout function
+  const handleSignout = async () => {
+    // console.log("clicked")
+    try {
+      await BaseUrl.get(`/api/auth/logout`);
+      dispatch(setUserData(null));
+      navigate("/auth");
+    } catch (error) {
+      console.log("handleSignout catch error: ", error);
+    }
+  };
 
   return (
     <motion.div
@@ -97,7 +116,14 @@ const Navbar = () => {
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
                 transition={{ duration: 0.4 }}
                 className="absolute right-0 mt-4 w-52 rounded-2xl bg-black/90 backdrop-blur-xl border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.7)] p-4 text-white"
-              ></motion.div>
+              >
+                <MenuItem
+                  text="History"
+                  onClick={() => setShowProfile(false)}
+                />
+                <div className="h-px bg-white/10 mt-3" />
+                <MenuItem text="Sign Out" red onClick={handleSignout} />
+              </motion.div>
             )}
           </AnimatePresence>
           {/* show-profile-dropdown-end */}
@@ -107,5 +133,16 @@ const Navbar = () => {
     </motion.div>
   );
 };
+
+function MenuItem({ onClick, text, red }) {
+  return (
+    <div
+      onClick={onClick}
+      className={`w-full text-left px-5 py-3 text-sm cursor-pointer transition-colors ${red ? "text-red-400 hover:bg-red-500/10z" : "text-gray-200 hover:bg-white/10"} rounded-lg`}
+    >
+      {text}
+    </div>
+  );
+}
 
 export default Navbar;
