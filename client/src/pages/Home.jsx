@@ -1,10 +1,14 @@
 import React, { Fragment } from "react";
 import Navbar from "../components/Navbar";
 import { motion } from "motion/react";
+import { useNavigate } from "react-router-dom";
 
 import Img from "../assets/img.png";
+import Footer from "../components/Footer";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   return (
     <Fragment>
       <div className="min-h-screen overflow-hidden bg-white text-black">
@@ -44,27 +48,28 @@ const Home = () => {
                 diagrams and revision-ready content using AI - faster, cleaner
                 and smarter.
               </motion.p>
-
-              <motion.button
-                whileHover={{
-                  y: 10,
-                  rotateX: 8,
-                  rotateY: 8,
-                  scale: 1.07,
-                }}
-                whileTap={{
-                  scale: 0.97,
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 200,
-                  dumping: 18,
-                }}
-                className="mt-10 px-3 py-3 rounded-xl flex items-center gap-3 bg-gradient-to-br from-black/90 via-black/80 to-black/90 border border-white/10 text-white font-semibold text-lg shadow-[0_25px_60px_rgba(0,0,0,0.7)]"
-              >
-                Get Started
-              </motion.button>
             </motion.div>
+
+            <motion.button
+              onClick={() => navigate("/notes")}
+              whileHover={{
+                // y: 10,
+                // rotateX: 8,
+                // rotateY: 8,
+                scale: 1.07,
+              }}
+              whileTap={{
+                scale: 0.97,
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 200,
+                dumping: 18,
+              }}
+              className="mt-10 px-3 py-3 rounded-xl flex items-center gap-3 bg-gradient-to-br from-black/90 via-black/80 to-black/90 border border-white/10 text-white font-semibold text-lg shadow-[0_25px_60px_rgba(0,0,0,0.7)] cursor-pointer"
+            >
+              Get Started
+            </motion.button>
           </div>
 
           {/* right-part */}
@@ -109,6 +114,9 @@ const Home = () => {
             des={`Download clean, printable PDF's instantly.`}
           />
         </section>
+
+        {/* footer */}
+        <Footer />
       </div>
     </Fragment>
   );
