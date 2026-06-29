@@ -22,3 +22,26 @@ export const generateNotes =async(payload)=>{
         console.log("services > api.js > generateNotes catch error: ", error)
     }
 }
+
+// download-pdf
+export const downloadPDF=async(result)=>{
+    try {
+        const response = await BaseUrl.post(`/api/pdf/generate-pdf`, {result}, {
+            responseType: "blob",
+        })
+
+        const blob = new Blob([response.data], {
+            type: "application/pdf",
+        })
+        const url = window.URL.createObjectURL(blob)
+        const link = document.createElement("a")
+        link.href= url 
+        link.download = "ExamNotesAI.pdf"
+        link.click()
+
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.log("api.js > downloadPdf catch error: ", error.message);
+        throw new Error("PDF download failed.", { cause: error });
+    }
+}

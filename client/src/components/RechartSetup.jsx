@@ -5,6 +5,8 @@ import {
   Cell,
   Line,
   LineChart,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -29,7 +31,7 @@ const RechartSetup = ({ charts }) => {
               <ResponsiveContainer width={"100%"} height={"100%"}>
                 {/* if chart is a bar chart */}
                 {chart.type === "bar" && (
-                  <BarChart dataKey={chart.data}>
+                  <BarChart data={chart.data}>
                     <XAxis dataKey={"name"} />
                     <YAxis />
                     <Tooltip />
@@ -45,7 +47,7 @@ const RechartSetup = ({ charts }) => {
 
                 {/* if chart is line-chart */}
                 {chart.type === "line" && (
-                  <LineChart dataKey={chart.data}>
+                  <LineChart data={chart.data}>
                     <XAxis dataKey={"name"} />
                     <YAxis />
                     <Tooltip />
@@ -56,6 +58,26 @@ const RechartSetup = ({ charts }) => {
                       strokeWidth={3}
                     />
                   </LineChart>
+                )}
+
+                {/* if-chart is pie */}
+                {chart.type === "pie" && (
+                  <PieChart>
+                    <Tooltip />
+                    <Pie
+                      data={chart.data}
+                      dataKey={"value"}
+                      nameKey={"name"}
+                      outerRadius={100}
+                      label
+                    >
+                      {chart.data.map((_, i) => {
+                        return (
+                          <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                        );
+                      })}
+                    </Pie>
+                  </PieChart>
                 )}
               </ResponsiveContainer>
             </div>
